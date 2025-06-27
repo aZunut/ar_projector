@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A-Frame AR映写機</title>
+    <script src="https://aframe.io/releases/1.7.0/aframe.min.js"></script>
+    <script src="ar_projector.js"></script>
+</head> 
+<body>
+    <a-scene xr-mode-ui="XRMode: xr">
+        <!-- <a-assets>
+            <img id="photo" src="film1/image1.JPG">
+        </a-assets> -->
+        <a-entity id="player-rig" look-controls>
+            <a-camera position="0 1.6 0">
+            <!-- <a-camera scale="1 1 1" raycaster="objects: .clickable; showLine: true; line.color: red; lineOpacity: 1.0 line.length: 10; direction: 0 0 -1"> -->
+                <!-- <a-cursor></a-cursor>  -->
+            </a-camera>
+        </a-entity>
+        <!-- <a-entity id="mouseCursor" fuse="false" raycaster="objects: clickable"></a-entity> -->
+        <a-entity id="leftHand" hand-tracking-grab-controls="hand: left;" class="hands"></a-entity>
+        <a-entity id="rightHand" hand-tracking-grab-controls="hand: right;" class="hands" obb-collider></a-entity>
+        <a-box grabbable id="projector" position="0 1 -1.2" scale="0.5 0.5 0.5" color="black" obb-collider>
+            <a-sphere id='point' position="0 0 0.75" scale="0.05 0.05 0.05" color="gray" hit-object obb-collider>
+
+            </a-sphere>
+            <a-cylinder id="detach" position="-0.3 -0.4 0.5" color="orange" height = "0.01"  radius = "0.05" rotation="90 0 0" detach obb-collider></a-cylinder>
+            <a-cylinder id="click" position="0.3 -0.4 0.5" color="cyan" height = "0.01"  radius = "0.05" rotation="90 0 0" slide obb-collider></a-cylinder>
+            <!-- <a-plane  class="clickable" src="#photo" position="0 1.6 -10" rotation="0 0 0" width="16" height="9" click-slide></a-plane> -->
+                <!-- <a-entity obb-collider = "showColliders: true" hit-object></a-entity> -->
+        </a-box>
+        <a-sphere grabbable id="film1" position="0.5 1 0" scale="0.1 0.1 0.1" class="films" color="red" obb-collider></a-sphere>
+        <a-sphere grabbable id="film2" position="0 1 0" scale="0.1 0.1 0.1" class="films" color="blue" obb-collider></a-sphere>
+        <a-sphere grabbable id="film3" position="-0.5 1 0" scale="0.1 0.1 0.1" class="films" color="green" obb-collider></a-sphere>
+        <!-- <a-box
+            class="clickable"
+            position="0 -6 -3"
+            width="1"
+            height="1"
+            color="red"
+            click-switch
+        >
+        </a-box> -->
+        <!-- <a-plane  class="clickable" src="#photo" position="0 1.6 -10" rotation="0 0 0" width="16" height="9" click-slide></a-plane> -->
+    </a-scene>
+</body>
+</html>
