@@ -58,16 +58,21 @@ AFRAME.registerComponent('hit-object', {
         // this.el.object3D.getWorldPosition(setPos);
         if (!collidedEl || !collidedEl.classList.contains('films')) return;
         // this.el.object3D.attach(collidedEl.object3D);
+        collidedEl.removeAttribute('grabbable');
         this.el.appendChild(collidedEl);
         // collidedEl.removeAttribute('grabbable');
         collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         // collidedEl.setAttribute('rotation', '0 0 0');
-        collidedEl.setAttribute('scale', { x: 6, y: 6, z: 6 });
+        collidedEl.setAttribute('scale', { x: 4, y: 4, z: 4 });
         this.data.isAttached = true;
         this.filmId = collidedEl.id;
         if (this.filmId == "film1") this.data.folderPath = "./film1/image";
         else if (this.filmId == "film2") this.data.folderPath = "./film2/image";
         else if (this.filmId == "film3") this.data.folderPath = "./film3/image";
+
+        setTimeout(() => {
+            collidedEl.setAttribute('grabbable', '');
+        }, 500); // 0.5秒後
     },
 
     OffCollision: function(evt){
