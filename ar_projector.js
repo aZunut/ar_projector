@@ -8,7 +8,7 @@ AFRAME.registerComponent('move-object',{
         this.PinchMove = this.PinchMove.bind(this);
         this.PinchEnd = this.PinchEnd.bind(this);
         this.pinchedEl = null;
-        this.pincDetection = false;
+        // this.pincDetection = false;
         const items = document.querySelectorAll('.films');
         var rightHand = document.getElementById('rightHand');
         var leftHand = document.getElementById('leftHand');
@@ -20,26 +20,27 @@ AFRAME.registerComponent('move-object',{
         leftHand.addEventListener('pinchended', this.PinchEnd)
     },
 
-    // PinchStart: function(evt){
-    //     this.fingerPos = evt.detail.position;
-    //     const worldPosition = new THREE.Vector3();
-    //     items.forEach(item => {
-    //         item.object3D.getWorldPosition(worldPosition);
-    //         const distance = item.distanceTo(this.fingerPos);
-    //         if (distance < objectDistance){
-    //             item.data.pinchDetection = true;
-    //         }
-    //     });
-    // },
-
     PinchStart: function(evt){
-        const raycasterEl = document.querySelector('[raycaster]');
-          // 現在カーソルが当たっている（交差している）オブジェクトのリストを取得
-        const intersectedEls = raycasterEl.components.raycaster.intersectedEls;
-        // 2. 当たった最初のオブジェクトを取得し、インスタンス変数に保存
-        this.pinchedEl = intersectedEls[0];
-        console.log(`Pinch started on: ${this.pinchedEl.id}`);
+        this.fingerPos = evt.detail.position;
+        const worldPosition = new THREE.Vector3();
+        items.forEach(item => {
+            item.object3D.getWorldPosition(worldPosition);
+            const distance = item.distanceTo(this.fingerPos);
+            if (distance < objectDistance){
+                this.pinchedEl = item;
+                // item.data.pinchDetection = true;
+            }
+        });
     },
+
+    // PinchStart: function(evt){
+    //     const raycasterEl = document.querySelector('[raycaster]');
+    //       // 現在カーソルが当たっている（交差している）オブジェクトのリストを取得
+    //     const intersectedEls = raycasterEl.components.raycaster.intersectedEls;
+    //     // 2. 当たった最初のオブジェクトを取得し、インスタンス変数に保存
+    //     this.pinchedEl = intersectedEls[0];
+    //     console.log(`Pinch started on: ${this.pinchedEl.id}`);
+    // },
 
     PinchMove: function(evt){
         if (!this.pinchedEl) { return; }
