@@ -1,125 +1,66 @@
-AFRAME.registerComponent('hit-object', {
+AFRAME.registerComponent('move-object',{
+    shcema:{
+        attachDistance:{type: "number", default: 0.01},
+        objectDistance:{type: "number", default: 0.01}
+    },
+    init: function(){
+        this.PinchStart = this.PinchStart.bind(this);
+        this.PinchMove = this.PinchMove.bind(this);
+        this.PinchEnd = this.PinchEnd.bind(this);
+        this.pinchedEl = null;
+        this.pincDetection = false;
+        const items = document.querySelectorAll('.films');
+        var rightHand = document.getElementById('rightHand');
+        var leftHand = document.getElementById('leftHand');
+        rightHand.addEventListener('pinchstarted', this.PinchStart)
+        rightHand.addEventListener('pinchmoved', this.PinchMove)
+        rightHand.addEventListener('pinchended', this.PinchEnd)
+        leftHand.addEventListener('pinchstarted', this.PinchStart)
+        leftHand.addEventListener('pinchmoved', this.PinchMove)
+        leftHand.addEventListener('pinchended', this.PinchEnd)
+    },
+
+    // PinchStart: function(evt){
+    //     this.fingerPos = evt.detail.position;
+    //     const worldPosition = new THREE.Vector3();
+    //     items.forEach(item => {
+    //         item.object3D.getWorldPosition(worldPosition);
+    //         const distance = item.distanceTo(this.fingerPos);
+    //         if (distance < objectDistance){
+    //             item.data.pinchDetection = true;
+    //         }
+    //     });
+    // },
+
+    PinchStart: function(evt){
+        const raycasterEl = document.querySelector('[raycaster]');
+          // 現在カーソルが当たっている（交差している）オブジェクトのリストを取得
+        const intersectedEls = raycasterEl.components.raycaster.intersectedEls;
+        // 2. 当たった最初のオブジェクトを取得し、インスタンス変数に保存
+        this.pinchedEl = intersectedEls[0];
+        console.log(`Pinch started on: ${this.pinchedEl.id}`);
+    },
+
+    PinchMove: function(evt){
+        if (!this.pinchedEl) { return; }
+          
+            // イベントから新しいワールド座標を取得
+            const newPosition = evt.detail.position;
+
+            // 保存しておいたオブジェクトの座標を更新
+            this.pinchedEl.setAttribute('position', newPosition);
+    },
+
+    PinchEnd: function(evt){
+        if (!this.pinchedEl) { return; }
+          
+          console.log(`Pinch ended on: ${this.pinchedEl.id}`);
+          this.pinchedEl = null;
+    }
+});
+
+AFRAME.registerComponent('film-state',{
     schema:{
-        isAttached:{type: 'boolean', default: false},
-        folderPath:{type: 'string', default: ""},
-    },
-    init: function(){
-        // this.data.setPoints = document.querySelector("#point");
-        this.snapPointEl = this.el;
-        this.projectorEl = this.el.querySelector("#projector");
-        this.isAttached = false;
-
-        this.OnCollision = this.OnCollision.bind(this);
-        this.RemoveComponent = this.RemoveComponent.bind(this);
-        // this.OffCollision = this.OffCollision.bind(this);
-        this.el.addEventListener('obbcollisionstarted', this.OnCollision);
-        // this.el.addEventListener('child-detached', this.RemoveComponent)
-    
-    },
-
-    OnCollision: function(evt){
-        const collidedEl = evt.detail.withEl;
-        if (!collidedEl || !collidedEl.classList.contains('films')) return;
-        collidedEl.removeAttribute('grabbable');
-       setTimeout(() => {
-        // このコールバック関数の中では、掴むシステムは完全にオブジェクトを解放しています。
-
-        // 2a. 安全な状態で、親子関係を変更する
-        this.el.object3D.attach(collidedEl.object3D);
-
-        // 2b. 新しい親からのローカル座標とスケールを設定する
-        collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
-        // collidedEl.setAttribute('material', { color: 'white' });
-        // 親のスケールを考慮し、元の大きさに見えるように調整
-        collidedEl.setAttribute('scale', { x: 4, y: 4, z: 4 });
-
-        // 2c. アタッチした要素への参照を保持し、情報を設定
-        this.attachedFilm = collidedEl;
-        this.filmId = collidedEl.id;
-        if (this.filmId === "film1") this.data.folderPath = "./film1/image";
-        else if (this.filmId === "film2") this.data.folderPath = "./film2/image";
-        else if (this.filmId === "film3") this.data.folderPath = "./film3/image";
-
-        // 2d. 再度掴めるようにする
-        // 以前は別のsetTimeoutでしたが、このタイミングでgrabbableを戻せばOK
-        collidedEl.setAttribute('grabbable', '');
-
-    }, 0); // 0ミリ秒の遅延で、次のイベントサイクルで実行される
-    },
-
-    OffCollision: function(evt){
-        const collidedEl = evt.detail.withEl;
-        if (!collidedEl || !collidedEl.classList.contains('films')) return;
-        const sceneEl = document.querySelector('a-scene');
-        sceneEl.object3D.attach(collidedEl.object3D);
-        // sceneEl.appendChild(collidedEl);
-        collidedEl.setAttribute('scale', { x: 0.1, y: 0.1, z: 0.1 });
-        collidedEl.setAttribute('position', { x: 0.5, y: 1.6, z: 0 });
-        this.data.isAttached = false;
-    },
-
-    RemoveComponent: function(evt){
-        // evt.target には、削除された子要素のObject3Dが格納されている
-        const removedChildObject = evt.target.el;
-        console.log('子要素が削除されました:', removedChildObject.id);
-        const sceneEl = document.querySelector('a-scene');
-        sceneEl.appendChild(removedChildObject);
-        // フィルムがはがされたことを確認
-        if (removedChildObject.el.classList.contains('films')) {
-        console.log('アタッチされていたフィルムがはがされました。isAttachedをfalseに設定します。');
-        collidedEl.setAttribute('scale', { x: 0.1, y: 0.1, z: 0.1 });
-        // isAttachedフラグを更新
-        this.data.isAttached = false;
-        // 必要であれば、他の状態もリセット
-        this.data.folderPath = "";
-        }
-    },
-});
-
-AFRAME.registerComponent('detach', {
-    init: function(){
-        this.stopButton = this.el;
-        this.setPoint = document.querySelector("#point");
-        this.setSphere = this.setPoint.querySelector('a-sphere');
-        this.el.addEventListener('obbcollisionstarted', (evt) => {
-            this.isAttached = this.setPoint.components['hit-object'].data.isAttached;
-            const collidedEl = evt.detail.withEl;
-            if (!collidedEl.classList.contains('hands')) return;
-            if (this.isAttached){
-                this.el.setAttribute('material', {color: 'white'});
-                const sceneEl = document.querySelector('a-scene');
-                sceneEl.appendChild(this.setSphere);
-                this.setSphere.setAttribute('position', { x: 0.7, y: 1.6, z: 0 });
-                this.setSphere.setAttribute('scale', { x: 0.1, y: 0.1, z: 0.1 });
-                this.setPoint.components['hit-object'].data.isAttached = false;
-            }
-        });
-
-        this.el.addEventListener('obbcollisionended', (evt) => {
-            this.el.setAttribute('material', {color: 'orange'});
-        });
+        pinchDetection:{type: 'boolean', default: false}
     }
-});
-
-AFRAME.registerComponent('slide',{
-    init: function(){
-        this.setPoint = document.querySelector("#point");
-        const extention = ".JPG";
-        const img = document.querySelector("#photo");
-        let num = 1;
-        this.el.addEventListener('obbcollisionstarted', (evt) => {
-            num += 1;
-            const collidedEl = evt.detail.withEl;
-            if (!collidedEl.classList.contains('hands')) return;
-            this.isAttached = this.setPoint.components['hit-object'].data.isAttached;
-            this.filmPath = this.setPoint.components['hit-object'].data.folderPath;
-            if (this.isAttached){
-                this.el.setAttribute('material', {color: 'white'});
-            }
-        });
-
-         this.el.addEventListener('obbcollisionended', (evt) => {
-            this.el.setAttribute('material', {color: 'cyan'});
-        });
-    }
-});
+})
