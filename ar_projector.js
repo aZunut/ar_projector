@@ -63,7 +63,7 @@ AFRAME.registerComponent('hit-object', {
         collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         collidedEl.setAttribute('material', {color: 'white'});
         // collidedEl.setAttribute('rotation', '0 0 0');
-        collidedEl.setAttribute('scale', { x: 10, y: 10, z: 10 });
+        collidedEl.setAttribute('scale', { x: 2, y: 2, z: 2 });
         this.data.isAttached = true;
         this.filmId = collidedEl.id;
         if (this.filmId == "film1") this.data.folderPath = "./film1/image";
