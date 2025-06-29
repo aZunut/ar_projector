@@ -19,9 +19,9 @@
             </a-camera>
         </a-entity>
         <!-- <a-entity id="mouseCursor" fuse="false" raycaster="objects: clickable"></a-entity> -->
-        <a-entity id="leftHand" hand-tracking-grab-controls="hand: left;" class="hands"></a-entity>
-        <a-entity id="rightHand" hand-tracking-grab-controls="hand: right;" class="hands" obb-collider></a-entity>
-        <a-box grabbable id="projector" position="0 1 -1.2" scale="0.5 0.5 0.5" color="black" obb-collider>
+        <a-entity id="leftHand" hand-tracking-controls="hand: left;" class="hands"></a-entity>
+        <a-entity id="rightHand" hand-tracking-controls="hand: right;" class="hands"></a-entity>
+        <a-box grabbable id="projector" position="0 1 -1.2" scale="0.5 0.5 0.5" color="black">
             <a-sphere id='point' position="0 0 0.75" scale="0.05 0.05 0.05" color="gray" hit-object obb-collider>
 
             </a-sphere>
@@ -30,9 +30,9 @@
             <!-- <a-plane  class="clickable" src="#photo" position="0 1.6 -10" rotation="0 0 0" width="16" height="9" click-slide></a-plane> -->
                 <!-- <a-entity obb-collider = "showColliders: true" hit-object></a-entity> -->
         </a-box>
-        <a-sphere grabbable id="film1" position="0.5 1 0" scale="0.1 0.1 0.1" class="films" color="red" obb-collider></a-sphere>
-        <a-sphere grabbable id="film2" position="0 1 0" scale="0.1 0.1 0.1" class="films" color="blue" obb-collider></a-sphere>
-        <a-sphere grabbable id="film3" position="-0.5 1 0" scale="0.1 0.1 0.1" class="films" color="green" obb-collider></a-sphere>
+        <a-sphere id="film1" position="0.5 1 0" scale="0.1 0.1 0.1" class="films" color="red" raycaster="showLine: true; far: 0.01 lineColor: red;"></a-sphere>
+        <a-sphere id="film2" position="0 1 0" scale="0.1 0.1 0.1" class="films" color="blue" raycaster="showLine: true; far: 0.01 lineColor: red;"></a-sphere>
+        <a-sphere id="film3" position="-0.5 1 0" scale="0.1 0.1 0.1" class="films" color="green" raycaster="showLine: true; far: 0.01 lineColor: red;"></a-sphere>
         <!-- <a-box
             class="clickable"
             position="0 -6 -3"
