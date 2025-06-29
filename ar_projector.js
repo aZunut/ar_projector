@@ -57,14 +57,13 @@ AFRAME.registerComponent('hit-object', {
         const collidedEl = evt.detail.withEl;
         // this.el.object3D.getWorldPosition(setPos);
         if (!collidedEl || !collidedEl.classList.contains('films')) return;
-        // this.el.object3D.attach(collidedEl.object3D);
+        this.el.object3D.attach(collidedEl.object3D);
         collidedEl.removeAttribute('grabbable');
-        this.el.appendChild(collidedEl);
-        // collidedEl.removeAttribute('grabbable');
-        // collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
+        // this.el.appendChild(collidedEl);
+        collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         collidedEl.setAttribute('material', {color: 'white'});
         // collidedEl.setAttribute('rotation', '0 0 0');
-        // collidedEl.setAttribute('scale', { x: 4, y: 4, z: 4 });
+        collidedEl.setAttribute('scale', { x: 10, y: 10, z: 10 });
         this.data.isAttached = true;
         this.filmId = collidedEl.id;
         if (this.filmId == "film1") this.data.folderPath = "./film1/image";
@@ -89,8 +88,8 @@ AFRAME.registerComponent('hit-object', {
 
     RemoveComponent: function(evt){
         // evt.target には、削除された子要素のObject3Dが格納されている
-        const removedChildObject = evt.target;
-        console.log('子要素が削除されました:', removedChildObject.el.id);
+        const removedChildObject = evt.target.el;
+        console.log('子要素が削除されました:', removedChildObject.id);
         const sceneEl = document.querySelector('a-scene');
         sceneEl.appendChild(removedChildObject);
         // フィルムがはがされたことを確認
