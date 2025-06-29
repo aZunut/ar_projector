@@ -13,58 +13,21 @@ AFRAME.registerComponent('hit-object', {
         this.RemoveComponent = this.RemoveComponent.bind(this);
         // this.OffCollision = this.OffCollision.bind(this);
         this.el.addEventListener('obbcollisionstarted', this.OnCollision);
-        this.el.addEventListener('child-detached', this.RemoveComponent);
-        // this.el.addEventListener('obbcollisionended', this.OffCollision);
-        // this.el.addEventListener('obbcollisionstarted', (evt) => { //接触 
-        //     const setPos = new THREE.Vector3();
-        //     const spherePos = new THREE.Vector3();
-        //     const collidedEl = evt.detail.withEl;
-        //     // this.el.object3D.getWorldPosition(setPos);
-        //     if (!collidedEl || !collidedEl.classList.contains('films')) return;
-        //     this.snapPointEl.object3D.add(collidedEl.object3D);
-        //     // collidedEl.removeAttribute('grabbable');
-        //     collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
-        //     // collidedEl.setAttribute('rotation', '0 0 0');
-        //     collidedEl.setAttribute('scale', { x: 2, y: 2, z: 2 });
-        //     this.data.isAttached = true;
-        //     this.filmId = collidedEl.id;
-        //     if (filmId == "film1") this.data.folderPath = "./film1/image";
-        //     else if (filmId == "film2") this.data.folderPath = "./film2/image";
-        //     else if (filmId == "film3") this.data.folderPath = "./film3/image";
-        //     // collidedEl.setAttribute('material', { color: '#0000FF' });
-        //     // this.projectorEl.object3D.attach(collidedEl.object3D);
-        //     // const snapPosition = this.snapPointEl.getAttribute('position');
-        //     // collidedEl.setAttribute('position', snapPosition);
-        //     // else this.el.sceneEl.appendChild(grabbedObject);
-        //     // setTimeout(() => {
-        //     //     collidedEl.setAttribute('grabbable', '');
-        //     // }, 200);
-        //     // collidedEl.removeAttribute(obb-collider);
-        //     // this.snapPointEl.removeAttribute(obb-collider);
-        // });
-
-        // this.el.addEventListener('obbcollisionended', (evt) => {
-        //     const collidedEl = evt.detail.withEl;
-        //     const sceneEl = document.querySelector('a-scene');
-        //     sceneEl.appendChild(collidedEl);
-        //     collidedEl.setAttribute('scale', { x: 0.1, y: 0.1, z: 0.1 });
-        //     this.isAttached = false;
-        // });
+        this.el.addEventListener('child-detached', this.RemoveComponent)
     
     },
 
     OnCollision: function(evt){
         const collidedEl = evt.detail.withEl;
-        // this.el.object3D.getWorldPosition(setPos);
         if (!collidedEl || !collidedEl.classList.contains('films')) return;
         this.el.object3D.attach(collidedEl.object3D);
         collidedEl.removeAttribute('grabbable');
-        // this.el.appendChild(collidedEl);
         collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         collidedEl.setAttribute('material', {color: 'white'});
         // collidedEl.setAttribute('rotation', '0 0 0');
         collidedEl.setAttribute('scale', { x: 2, y: 2, z: 2 });
         this.data.isAttached = true;
+        this.attachedFilm = collidedEl; 
         this.filmId = collidedEl.id;
         if (this.filmId == "film1") this.data.folderPath = "./film1/image";
         else if (this.filmId == "film2") this.data.folderPath = "./film2/image";
@@ -102,12 +65,6 @@ AFRAME.registerComponent('hit-object', {
         this.data.folderPath = "";
         }
     },
-
-
-    // tick :function (){
-    //     if (this.data.isAttached) this.projectorEl.setAttribute('material', {color: 'white'});
-    //     else this.projectorEl.setAttribute('material', {color: 'black'});
-    // }
 });
 
 AFRAME.registerComponent('detach', {
