@@ -61,7 +61,7 @@ AFRAME.registerComponent('hit-object', {
         collidedEl.removeAttribute('grabbable');
         this.el.appendChild(collidedEl);
         // collidedEl.removeAttribute('grabbable');
-        collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
+        // collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         collidedEl.setAttribute('material', {color: 'white'});
         // collidedEl.setAttribute('rotation', '0 0 0');
         // collidedEl.setAttribute('scale', { x: 4, y: 4, z: 4 });
