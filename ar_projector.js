@@ -20,8 +20,8 @@ AFRAME.registerComponent('hit-object', {
     OnCollision: function(evt){
         const collidedEl = evt.detail.withEl;
         if (!collidedEl || !collidedEl.classList.contains('films')) return;
-        this.el.object3D.attach(collidedEl.object3D);
         collidedEl.removeAttribute('grabbable');
+        this.el.object3D.attach(collidedEl.object3D);
         collidedEl.setAttribute('position', { x: 0, y: 0, z: 0 });
         collidedEl.setAttribute('material', {color: 'white'});
         // collidedEl.setAttribute('rotation', '0 0 0');
